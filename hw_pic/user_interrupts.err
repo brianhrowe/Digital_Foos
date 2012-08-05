@@ -1,0 +1,2 @@
+Warning[2058] C:\Workspace\Foos\Sensors\_Current_Project\Commands\user_interrupts.c 45 : call of function without prototype
+Warning[2058] C:\Workspace\Foos\Sensors\_Current_Project\Commands\user_interrupts.c 74 : call of function without prototype
