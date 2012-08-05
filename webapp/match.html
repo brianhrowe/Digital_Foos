@@ -10,6 +10,7 @@
 	</style>
 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />  
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="http://js.pusher.com/1.12/pusher.min.js"></script>
 	<script type="text/javascript">  
 		var currentGame;
 		var score;
@@ -21,7 +22,13 @@
 			if(!isNaN(matchid))
 			{
 				$.post("/prototype/getScores.php", {match_id : matchid}, output, "json");
-				poll();
+				var pusher = new Pusher('11486c1d5e9edacb7227');
+				var channel = pusher.subscribe('my-channel');
+				channel.bind('my-event', function(data) {
+					//alert('An event was triggered with message: ' + data);
+					output(data);
+				});
+				//poll();
 			}
 		});  
 		

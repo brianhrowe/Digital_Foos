@@ -1,6 +1,10 @@
 
 
 <?php
+require('Pusher.php');
+
+$pusher = new Pusher("11486c1d5e9edacb7227", "0035b6daa40e3f4c14f3", "25294");
+
 // config variables  
 //$match_id = $_GET['goal'];    // time frame (seconds) to count active users  
   
@@ -19,12 +23,13 @@ $query = "SELECT * FROM " . $db_table. " WHERE status = 'in_progress' LIMIT 5";
 $get_ip = mysql_query($query);
 $row = mysql_fetch_array($get_ip);
 $match_id = $row["match_id"];
-echo $match_id;
+echo "Match ID = $match_id";
 if(isset($_GET['goal']) && $_GET['goal'] == "true")
 {
 print_r($_GET);
 	if(isset($_GET['id']) && $_GET['id'] == "ksq_tornado_sport_0001")
 	{
+	
 		$get_ip = mysql_query("SELECT * FROM " . $db_table . " WHERE match_id = " . $match_id . " LIMIT 1");  
 		$row = mysql_fetch_array($get_ip);
 		$current_game = $row['currentGame'];
@@ -66,6 +71,7 @@ print_r($_GET);
 					$get_ip = mysql_query("UPDATE `matches` SET `status`='over'");  
 					$get_ip = mysql_query("UPDATE `matches` SET `winner`='$matchWinner'");  
 				}
+				sendMatchData($pusher, $db_table, $match_id);
 			}
 		}
 	}
@@ -185,5 +191,113 @@ function checkMatchWinner($current_game, $game1Winner, $game2Winner, $game3Winne
 			$matchWinner = "team1";
 	}
 	return $matchWinner;
+}
+
+function sendMatchData($pusher, $db_table, $match_id)
+{
+	$jsonArray = array();
+
+	$get_ip = mysql_query("SELECT * FROM " . $db_table . " WHERE match_id = " . $match_id . " LIMIT 1");  
+	$row = mysql_fetch_array($get_ip);
+
+	$jsonArray["time"] = $row['time'];
+	$jsonArray["game1Score"] = $row['game1Score'];
+	$jsonArray["game2Score"] = $row['game2Score'];
+	$jsonArray["game3Score"] = $row['game3Score'];
+	$jsonArray["currentGame"] = $row['currentGame'];
+	$jsonArray["team1"] = $row['team1'];
+	$jsonArray["team2"] = $row['team2'];
+	$jsonArray["player1_1"] = $row['player1_1'];
+	$jsonArray["player1_2"] = $row['player1_2'];
+	$jsonArray["player2_1"] = $row['player2_1'];
+	$jsonArray["player2_2"] = $row['player2_2'];
+	$jsonArray["player2_2"] = $row['player2_2'];
+	
+	$gameScore = "game" . $row['currentGame'] . "Score";
+	$gameScore = $row[$gameScore];
+	$split = explode('-', $gameScore );
+	//var_dump($split);
+	$yellowScore = $split[0];
+	$blackScore = $split[1];
+	
+	$jsonArray["yellowScore"] = $yellowScore;
+	$jsonArray["blackScore"] = $blackScore;
+	
+	$game1Winner = "...";
+	$game2Winner = "...";
+	$game3Winner = "...";
+	if($row['game1Winner'] != "none")
+	{
+		$game1Winner = $row['game1Winner'];
+		if($game1Winner == "b")
+			$game1Winner .= " - " .  $row['team1'];
+		else
+			$game1Winner .= " - " .  $row['team2'];
+		$game1Winner .= " - " . $jsonArray["game1Score"];
+	}
+	if($row['game2Winner'] != "none")
+	{
+		$game2Winner = $row['game2Winner'];
+		if($game2Winner == "b")
+			$game2Winner .= " - " . $row['team2'];
+		else
+			$game2Winner .= " - " .  $row['team1'];
+		$game2Winner .= " - " . $jsonArray["game2Score"];
+	}
+	if($row['game3Winner'] != "none")
+	{
+		$game3Winner = $row['game3Winner'];
+		if($game3Winner == "b")
+			$game3Winner .= " - " .  $row['team1'];
+		else
+			$game3Winner .= " - " .  $row['team2'];
+		$game3Winner .= " - " . $jsonArray["game3Score"];
+	}
+	
+	$jsonArray["game1Winner"] = $game1Winner;
+	$jsonArray["game2Winner"] = $game2Winner;
+	$jsonArray["game3Winner"] = $game3Winner;
+	
+	$table_name = $row['table'];
+	$table_arr = explode('_', $table_name);
+	//print_r($table_arr);
+	$table_name = $table_arr[0] . " " . $table_arr[1] . " " . $table_arr[2];
+	$table_name = ucwords($table_name);
+	$jsonArray["table"] = $table_name;
+	
+	if ($row['status'] == "over" && $row)
+	{
+		//var_dump($row);
+		$winner = $row['winner'];
+		switch ($winner)
+		{
+			case "team1":
+				$winner = $row['team1'];
+			break;
+			case "team2":
+				$winner = $row['team2'];
+			break;
+		}
+		$jsonArray["status"] = "Game over! Winner: $winner";
+	}
+	else
+	{
+		$jsonArray["status"] =  ucwords(convertToPhrase($row['status'] ));
+	}
+	$pusher->trigger('my-channel', 'my-event', $jsonArray );
+}
+
+function convertToPhrase($input) 
+{
+	$phrase_arr = explode('_', $input);
+	$output = "";
+	$i;
+	for($i = 0; $i < count($phrase_arr); $i++)
+	{
+		$output = $output.$phrase_arr[$i];
+		if(count($phrase_arr) + 1 != $i)
+			$output = $output." ";
+	}
+	return $output;
 }
 ?>

@@ -68,7 +68,7 @@ else
 	$jsonArray["game3Score"] = $row['game3Score'];
 	
 	//////////Long Polling;
-	if( isset($_POST['poll']) && $_POST['poll'] == true ){
+/* 	if( isset($_POST['poll']) && $_POST['poll'] == true ){
 		if(isset($_POST['browserGame']) && $_POST['browserGame'] == true ){
 			$browserGame = $_POST['browserGame'];
 			if(isset($_POST['browserScore']) && $_POST['browserScore'] == true ){
@@ -105,7 +105,7 @@ else
 				}
 			}
 		}
-	}
+	} */
 	
 	switch($current_game)
 		{
