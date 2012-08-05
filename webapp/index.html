@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"  
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">  
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="nl">  
+<head>
+	<title>Start Match</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />  
+	<script type="text/javascript" src="prototype.js"></script>  
+	<script type="text/javascript" src="updater.js"></script>  
+	<script type="text/javascript">  
+		// <![CDATA[  
+		document.observe('dom:loaded', function() {  
+			/* 
+			first arg   : div to update 
+			second arg  : match_id in seconds 
+			third arg   : file to get data from 
+			*/  
+		/*	var matchid = getUrlVars()["match_id"];
+			var matchid = parseInt(matchid);
+			if(!isNaN(matchid))
+			{
+				
+				var visitorCounter = new updater('scoreboard', matchid, 5,'getScores.php');  
+				  
+				// Make first call so we get an immediate update after the page is loaded   
+				visitorCounter.getUpdate();  
+			}*/
+		});  
+		
+		function getUrlVars() {
+			var vars = {};
+			var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+				vars[key] = value;
+			});
+			return vars;
+		}
+
+			// ]]> 
+	</script>
+</head>
+<body>
+	<div id="wrapper">
+		<div id="starter">
+			<h1>Start New Match</h1>
+			<form action="newMatch.php" method="POST">
+			<h3>Team 1 - Black</h3>
+			Team Name:<input type=text name=team1><br />
+			Player 1:<input type=text name=player1_1>
+			Player 2:<input type=text name=player1_2>
+			<h3>Team 2 - Yellow</h3>
+			Team Name:<input type=text name=team2><br />
+			Player 1:<input type=text name=player2_1>
+			Player 2:<input type=text name=player2_2><br />
+			Table:
+			<select name="table">
+				<option value="ksq_tornado_sport">KSQ North Tornado Sport</option>
+			</select><br />
+			<input type=submit value="New Match">
+			</form>
+		</div>
+	</div>
+</body>
+</html>

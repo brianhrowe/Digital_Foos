@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"   
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">  
+<html xmlns="http://www.w3.org/1999/xhtml">  
+<head>  
+    <title>Ajax Retrieve Comments System</title>  
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />  
+    <meta http-equiv="pragma" content="no-cache" />  
+    <script type="text/javascript" src="prototype.js"></script>  
+	<script type="text/javascript">  
+	//<![CDATA[  
+	   document.observe('dom:loaded', function () {  
+			$$('.toggle').each(function(item) {   
+				$('match_id_'+item.id).hide();  
+				item.update('<img src="../images/get.gif" alt="Hide Match Details" /> Hide Match Details');  
+			  
+				Event.observe(item, 'click', function(event){  
+
+					$('match_id_'+item.id).toggle();  
+					if($('match_id_'+item.id).visible()){  
+						var sId = item.id;  
+						var oOptions = {  
+							method: "post",  
+							parameters: "match_id=" + sId + "&view=matches"
+						};  
+						var oRequest = new Ajax.Updater({success: "match_id_"+item.id}, "getScores.php", oOptions);             
+						item.update('<img src="../images/lose.gif" alt="Hide Match Details" /> Hide Match Details');  
+					} else {  
+						item.update('<img src="../images/get.gif" alt="Show Match Details" /> Hide Match Details');  
+					}  
+				});  
+			});  
+		});  
+	// ]]>  
+	</script> 
+</head>  
+<body>  
+	<h1>New Match</h1>
+	<h1>Recent Matches</h1>
+          <div class="matchItem">  
+              <h2>Match 3</h2>  
+              <div id="match_3" class="match">I love films based on true stories like Schindler's List, Titanic, Rain man and Star Wars.</div>  
+              <p><span id="3" class="toggle"></span></p>  
+              <div id="match_id_3" class="comments"></div>  
+          </div>      
+            
+          <div class="matchItem">  
+              <h2>News Item heading two</h2>  
+              <div id="news_20081030" class="news">I like cats, frogs and ponies.</div>  
+              <p><span id="20081030" class="toggle"></span></p>  
+              <div id="comments_20081030" class="comments"></div>  
+          </div>      
+</body>  
+</html> 

@@ -1,0 +1,146 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"  
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">  
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="nl">  
+<head>
+	<title>Match Info</title>
+	<style type="text/css" media="screen">
+	/* <![CDATA[ */
+	@import url(style.css);
+	/* ]]> */
+	</style>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />  
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript">  
+		var currentGame;
+		var score;
+		var matchid;
+		$(document).ready(function() {
+			
+			matchid = getUrlVars()["match_id"];
+			matchid = parseInt(matchid);
+			if(!isNaN(matchid))
+			{
+				$.post("/prototype/getScores.php", {match_id : matchid}, output, "json");
+				poll();
+			}
+		});  
+		
+		function poll(){
+			$.ajax({
+				type: "POST", 
+				url: "/prototype/getScores.php", 
+				data : {match_id : matchid, poll: "true", browserGame: currentGame, browserScore: score}, 
+				success: function(data){
+				output(data);
+				}, dataType: "json",
+				complete: poll,				
+				timeout: 5000,
+				error: function(xhr, ajaxOptions, thrownError){
+                    //alert(xhr.status);
+                    //alert(thrownError);
+				}
+			});
+			//$.post("/prototype/getScores.php", {match_id : matchid}, output, "json");
+		}
+		
+		
+		function output(data) {
+			$("#time").text("Match Started - " + data.time);
+			$("#currentGame1").text(data.currentGame);
+			
+			currentGame = data.currentGame;
+			score = data.blackScore + "-" + data.yellowScore;
+			
+			//alert (currentGame + " : " + score);
+			
+			$("#team1").html(data.team1);
+			$("#team2").html(data.team2);
+			$("#blackP1").html(data.player1_1);
+			$("#blackP2").html(data.player1_2);
+			$("#yellowP1").html(data.player2_1);
+			$("#yellowP2").html(data.player2_2);
+			
+			$("#score2").html(data.blackScore);
+			$("#score").html(data.yellowScore);
+			
+			$("#g1").html("<h3>Game 1</h3>\n" + data.game1Winner);
+			$("#g2").html("<h3>Game 2</h3>\n" + data.game2Winner);
+			$("#g3").html("<h3>Game 3</h3>\n" + data.game3Winner);
+			
+			$("#table").text(data.table);
+			
+			$("#status").children('h3').text("Status : " + data.status);
+			//poll();
+		}
+		
+		function updateScoreboard()
+		{
+		
+		}
+		
+		function getUrlVars() {
+			var vars = [], hash
+			var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+				vars[key] = value;
+			});
+			return vars;
+		}
+
+			// ]]> 
+	</script>
+</head>
+<body>
+	<div id="wrapper">
+		<div id="scoreboard">
+			<h1>Match Info</h1>
+			<h3 id="time">Match Started - </h3>
+			<h2>Game <span id="currentGame1"></span> Score</h2>  
+			<div id="black_team" class="team_name">
+				<h3 id="team1">Team 1</h3>
+				<h4 id="blackP1">Player 1</h4>
+				<h4 id="blackP2">Player 2</h4>
+			</div>
+			<div id="black" class="team_score">
+				<h2>Black</h2>
+				<div id="score2" class="score_val">  
+				0
+				</div>  
+			</div>
+			<div id="yellow" class="team_score">
+				<h2>Yellow</h2>
+				<div id="score" class="score_val">  
+				0
+				</div>  
+			</div>
+			<div id="yellow_team" class="team_name">
+				<h3 id="team2">Team 2</h3>
+				<h4 id="yellowP1">Player 3</h4>
+				<h4 id="yellowP2">Player 4</h4>
+			</div>
+			<div id="g1" class="clearfix">
+				<h3>Game 1</h3>
+				...
+			</div>
+			<div id="g2">
+				<h3>Game 2</h3>
+				...
+			</div>
+			<div id="g3">
+				<h3>Game 3</h3>
+				...
+			</div>
+			<div id="currentGame2">
+				<h3>Current Game</h3>
+				Game 
+			</div>
+			<div id="table">
+				<h3>Table</h3>
+				Pending
+			</div>
+			<div id="status">
+				<h3>Status: </h3>
+			</div>
+		</div>  
+	</div>
+</body>
+</html>

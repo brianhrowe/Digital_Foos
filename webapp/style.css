@@ -1,0 +1,36 @@
+* {
+		margin: 0;
+		padding: 0;
+		}
+
+#scoreboard {
+	width: 800px;
+	margin: 0 auto;
+}	
+
+.team_name {
+	margin: 15px;
+	text-align: center;
+}
+
+#black_team {
+float: left;
+}
+
+.team_score {
+float: left;
+width: 30%;
+margin-right: 15px;
+margin-top: 40px;
+text-align: center;
+margin: 0 auto;
+}
+
+.score_val {
+margin-top: 20px;
+text-align: center;
+}
+
+.clearfix {
+clear: both;
+}
