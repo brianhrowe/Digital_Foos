@@ -60,12 +60,12 @@
 			
 			//alert (currentGame + " : " + score);
 			
-			$("#team1").html(data.team1);
-			$("#team2").html(data.team2);
-			$("#blackP1").html(data.player1_1);
-			$("#blackP2").html(data.player1_2);
-			$("#yellowP1").html(data.player2_1);
-			$("#yellowP2").html(data.player2_2);
+			$("#blackTeam").html(data.blackTeam);
+			$("#yellowTeam").html(data.yellowTeam);
+			$("#blackP1").html(data.blackP1);
+			$("#blackP2").html(data.blackP2);
+			$("#yellowP1").html(data.yellowP1);
+			$("#yellowP2").html(data.yellowP2);
 			
 			$("#score2").html(data.blackScore);
 			$("#score").html(data.yellowScore);
@@ -103,7 +103,7 @@
 			<h3 id="time">Match Started - </h3>
 			<h2>Game <span id="currentGame1"></span> Score</h2>  
 			<div id="black_team" class="team_name">
-				<h3 id="team1">Team 1</h3>
+				<h3 id="blackTeam">Team 1</h3>
 				<h4 id="blackP1">Player 1</h4>
 				<h4 id="blackP2">Player 2</h4>
 			</div>
@@ -120,7 +120,7 @@
 				</div>  
 			</div>
 			<div id="yellow_team" class="team_name">
-				<h3 id="team2">Team 2</h3>
+				<h3 id="yellowTeam">Team 2</h3>
 				<h4 id="yellowP1">Player 3</h4>
 				<h4 id="yellowP2">Player 4</h4>
 			</div>

@@ -265,6 +265,34 @@ function sendMatchData($pusher, $db_table, $match_id)
 	$table_name = ucwords($table_name);
 	$jsonArray["table"] = $table_name;
 	
+	if($row["currentGame"] % 2 != 0)
+	{
+		$black_team = $jsonArray["team1"];
+		$yellow_team = $jsonArray["team2"];
+	}
+	else
+	{
+		$black_team = $jsonArray["team2"];
+		$yellow_team = $jsonArray["team1"];
+	}
+	
+	$jsonArray["blackTeam"] = $black_team;
+	$jsonArray["yellowTeam"] = $yellow_team;
+	if ($jsonArray["black_team"] == $team1)
+	{
+		$jsonArray["blackP1"] = $jsonArray["player1_1"];
+		$jsonArray["blackP2"] = $jsonArray["player1_2"];
+		$jsonArray["yellowP1"] = $jsonArray["player2_1"];
+		$jsonArray["yellowP2"] = $jsonArray["player2_2"];
+	}
+	else
+	{
+		$jsonArray["blackP1"] = $jsonArray["player2_1"];
+		$jsonArray["blackP2"] = $jsonArray["player2_2"];
+		$jsonArray["yellowP1"] = $jsonArray["player1_1"];
+		$jsonArray["yellowP2"] = $jsonArray["player1_2"];
+	}
+	
 	if ($row['status'] == "over" && $row)
 	{
 		//var_dump($row);

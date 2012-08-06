@@ -1,11 +1,11 @@
 * {
-		margin: 0;
-		padding: 0;
-		}
+	margin: 0;
+	padding: 0;
+}
 
 #scoreboard {
-	width: 800px;
-	margin: 0 auto;
+width: 800px;
+margin: 0 auto;
 }	
 
 .team_name {

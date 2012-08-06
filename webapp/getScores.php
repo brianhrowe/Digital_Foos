@@ -196,6 +196,14 @@ else
 		$yellowP2 = $player1_2;
 	}
 	
+	$jsonArray["blackP1"] = $blackP1;
+	$jsonArray["blackP2"] = $blackP2;
+	$jsonArray["yellowP1"] = $yellowP1;
+	$jsonArray["yellowP2"] = $yellowP2;
+	
+	$jsonArray["blackTeam"] = $black_team;
+	$jsonArray["yellowTeam"] = $yellow_team;
+	
 	if ($in_progress == "over" && $row)
 	{
 		//var_dump($row);
