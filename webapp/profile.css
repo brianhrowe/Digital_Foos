@@ -1,0 +1,181 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+
+#wrapper {
+width: 800px;
+margin: 0px auto;
+display: block;
+overflow : hidden;
+}
+
+#matchCarousel {
+width: 100%;
+height: 75px;
+background-color: grey;
+position: relative;
+margin-top: 5px;
+}
+
+.carouselArrow {
+width: 15px;
+height: 73px;
+background-color: red;
+display: block;
+position: absolute;
+text-align: center;
+line-height: 75px;
+border: 1px solid grey;
+}
+
+#matchesList {
+position:relative;
+left:0;
+top:0;
+list-style:none;
+margin:0;
+padding:0;  
+width:750px;  
+}
+
+.carouselArrow a {
+display: block;
+}
+
+.matchSummary {
+width: 108px;
+height: 71px;
+background-color: yellow;
+border-top: 2px solid grey;
+border-bottom: 2px solid grey;
+border-left: 1px solid grey;
+border-right: 1px solid grey;
+float: left;
+position: relative;
+list-style: none;
+}
+
+#leftArrow {
+float: left;
+}
+
+#rightArrow {
+right: 0px;
+}
+
+#matches {
+width: 770px;
+height: 100%;
+float: left;
+background-color: black;
+display: block;
+position: relative;
+left: 15px;
+display: block;
+overflow: hidden;
+}
+
+.games {
+margin-left: 60px;
+margin-bottom: 10px;
+font-weight: bold;
+}
+
+.matchSummary h1 {
+font-size: 12px;
+display: block;
+float: left;
+}
+
+.matchSummary h4 {
+float: left;
+font-size: 10px;
+margin-top: 5px;
+margin-left: 5px;
+}
+
+.inlineList {
+list-style: none;
+/* width: 100%; */
+position: absolute;
+display: block;
+margin-top: 3px;
+right: 0;
+}
+
+.inlineList li {
+float: left;
+width: 15px;
+/* border: 1px solid red; */
+text-align: center;
+display: block;
+}
+
+.scores {
+
+}
+
+/*****************************************************************/
+
+#playerPic {
+width : 200px;
+height : 200px;
+background-size: 200px;
+background-repeat : no-repeat;
+background-image : url("./images/default.png");
+float: left;
+margin-right: 5px;
+display: inline;
+}
+
+#playerInfo {
+width: 600px;
+margin-left: 205px;
+}
+
+#mainInfo {
+list-style: none;
+position:relative;
+display:block;
+width:auto;
+/* width: 100%; */
+
+}
+
+#mainInfo li {
+margin: 10px 0px;
+width: 33%;
+text-align: center;
+float: left;
+display:block;
+}
+
+#mainInfo > li:last-child
+{
+/* float: none; */
+}
+
+#mainInfo > li:not(:first-child)
+{
+border-left: 1px solid black;
+}
+
+#otherInfo {
+list-style: none;
+float: left;
+}
+
+#otherInfo li {
+clear: both;
+}
+.otherInfoField {
+font-weight: bold;
+width: 100px;
+display: block;
+float: left;
+}
+
+.clearfix {
+clear: both;
+}

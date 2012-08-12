@@ -1,0 +1,174 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<title>Player Profile</title>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<style type="text/css" media="screen">
+/* <![CDATA[ */
+@import url(profile.css);
+/* ]]> */
+	</style>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script type="text/javascript">
+		var playerid;
+		var player;
+		$(document).ready(function() {
+			/////////////
+			//Player info
+			playerid = getUrlVars()["playerid"];
+			playerid = parseInt(playerid);
+			if(!isNaN(playerid)){
+				$.get("/prototype/getProfile.php", {playerid : playerid}, updateProfile, "json");
+			}
+			//////////////////
+			//Matches Carousel
+			var item_width = parseInt($('.matchSummary').outerWidth());
+			var left_value = item_width * (-1); 
+			$('#matchesList').css({'left' : 0});
+			$("#leftArrow").click(function(event) {
+				if ($(':animated').length) {
+					return false;
+				}
+				event.preventDefault();
+				var left_indent = parseInt($("#matchesList").css("margin-left"));
+				var offset =  left_indent - item_width ;
+				$("#matchesList").animate( { "margin-left" : offset }, 400, function() {
+					//$("#matchesList").css( { "left" : left_value } );
+				});
+				
+				return false;
+			});
+			$("#rightArrow").click(function(event) {
+			    if($(':animated').length) {
+					return false;
+				}
+				event.preventDefault();
+				var left_indent = parseInt($("#matchesList").css("margin-left"));
+				var offset = left_indent + item_width;
+				$("#matchesList").animate( { "margin-left" : offset }, 400, function() {
+					//$("#matchesList").css( { "left" : left_value } );
+				});
+				
+				return false;
+			});
+			$.post("/prototype/getScores.php", {match_id : 13}, updateMatches, "json");
+		});
+		
+		function updateMatches(data)
+		{
+			
+		}
+		
+		function updateProfile(data)		{
+			//alert(data);
+			$("#playerHandle").text(data.handle);
+			$.ajax({
+				url:'./images/' + data.avatar,
+				type:'HEAD',
+				error:
+					function(){
+						//do something depressing
+					},
+				success:
+					function(){
+						$("#playerPic").css( {"background-image":"url(./images/" + data.avatar + ")" });
+					}
+			});
+			$("#jersey").text("#" + data.jersey);
+			$("#height").text(data.height);
+			$("#weight").text(data.weight + " lbs");
+			
+			$("#name").append(data.firstName + " " + data.lastName);
+			$("#dob").append(data.dob);
+			$("#playStyle").append(data.playStyle);
+			var shots = data.shots.split("||");
+			for(var i = 0; i < shots.length; i++) {
+				$("#shots").append(shots[i]);
+				if(i + 1 != shots.length)
+					$("#shots").append(" ");
+			}
+			$("#motto").append(data.motto);
+			$("#bio").append(data.bio);
+		}
+		
+		function getUrlVars() {
+			var vars = [], hash
+			var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+				vars[key] = value;
+			});
+			return vars;
+		}
+	</script>
+</head>
+<body>
+  <div id="wrapper">
+	<div id="matchCarousel">
+		<div id="leftArrow" class="carouselArrow">
+		<a href="#"><</a>
+		</div>
+		<div id="rightArrow" class="carouselArrow">
+		<a href="#">></a>
+		</div>
+		<div class="clearfix"></div>
+		<div id="matches">
+			<ul id="matchesList">
+				<li class="matchSummary">
+					<h1 class="game-staus">Game 1</h1>
+					<ul class="inlineList games">
+						<li>1</li>
+						<li>2</li>
+						<li>3</li>
+					</ul>
+					<br />
+					<h4>Team 1</h4>
+					<ul class="scores inlineList">
+						<li>0</li>
+						<li>0</li>
+						<li>0</li>
+					</ul>
+					<br />
+					<h4>Team 2</h4>
+					<ul class="scores inlineList">
+						<li>0</li>
+						<li>0</li>
+						<li>0</li>
+					</ul>
+				</li>
+<!-- 				<li class="matchSummary">
+				</li>
+				<li class="matchSummary">
+				</li>
+				<li class="matchSummary">
+				</li>
+				<li class="matchSummary">
+				</li>
+				<li class="matchSummary">
+				</li>
+				<li class="matchSummary">
+				</li> -->
+			</ul>
+		</div>
+
+	</div>
+	<div id="playerPic"></div>
+	<div id="playerInfo">
+		<h1 id="playerHandle">Player Handle</h1>
+		<hr />
+		<ul id="mainInfo">
+			<li id="jersey">#000 </li><li id="height">0'0"</li><li id="weight">000 lbs</li>
+		</ul>
+		<br />
+		<br />
+		<ul id="otherInfo" class="fclearfix">
+			<li id="name"><span class="otherInfoField">Name:</span> </li>
+			<li id="dob"><span class="otherInfoField">Born:</span> </li>
+			<li id="playStyle"><span class="otherInfoField">Play Style:</span> </li>
+			<li id="shots"><span class="otherInfoField">Shots:</span> </li>
+			<li id="motto"><span class="otherInfoField">Motto:</span> </li>
+			<li id="bio"><span class="otherInfoField">Bio:</span> </li>
+		</ul>
+	</div>
+  </div>
+</body>
+</html>
