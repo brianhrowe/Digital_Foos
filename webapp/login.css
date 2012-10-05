@@ -9,7 +9,8 @@
 }
 
 .tab {
-  	background: url(../images/tab_b.png) repeat-x 0 0;
+	background-color: #272727; 
+  	background: url(./images/tab_b.png) repeat-x 0 0;
 	height: 42px;
 	position: relative;
     top: 0;
@@ -17,6 +18,7 @@
 }
 
 .tab ul.login {
+	background-color: #272727; 
 	display: block;
 	position: relative;
   	float: right;
@@ -33,7 +35,7 @@
 }
 
 .tab ul.login li.left {
-  	background: url(../images/tab_l.png) no-repeat left 0;
+  	background: url(./images/tab_l.png) no-repeat left 0;
   	height: 42px;
 	width: 30px;
 	padding: 0;
@@ -43,7 +45,7 @@
 }
 
 .tab ul.login li.right {
-  	background: url(../images/tab_r.png) no-repeat left 0;
+  	background: url(./images/tab_r.png) no-repeat left 0;
   	height: 42px;
 	width: 30px;
 	padding: 0;
@@ -58,7 +60,7 @@
 	display: block;
 	float: left;
 	height: 42px;
-  	background: url(../images/tab_m.png) repeat-x 0 0;
+  	background: url(./images/tab_m.png) repeat-x 0 0;
 }
 
 .tab ul.login li a {
@@ -82,10 +84,10 @@
 	top: 11px;
 }
 
-.tab a.open {background: url(../images/bt_open.png) no-repeat left 0;}
-.tab a.close {background: url(../images/bt_close.png) no-repeat left 0;}
-.tab a:hover.open {background: url(../images/bt_open.png) no-repeat left -19px;}
-.tab a:hover.close {background: url(../images/bt_close.png) no-repeat left -19px;}
+.tab a.open {background: url(./images/bt_open.png) no-repeat left 0;}
+.tab a.close {background: url(./images/bt_close.png) no-repeat left 0;}
+.tab a:hover.open {background: url(./images/bt_open.png) no-repeat left -19px;}
+.tab a:hover.close {background: url(./images/bt_close.png) no-repeat left -19px;}
 
 /* sliding panel */
 #toppanel {
@@ -106,7 +108,7 @@
 	background: #272727;
 	overflow: hidden;
 	position: relative;
-	z-index: 3;
+	z-index: 1000;
 	/* display: none; */
 }
 
@@ -207,13 +209,13 @@
 
 #panel .content input.bt_login {
 	width: 74px;
-	background: transparent url(../images/bt_login.png) no-repeat 0 0;
+	background: transparent url(./images/bt_login.png) no-repeat 0 0;
 }
 
 #panel .content input.bt_register {
 	width: 94px;
 	color: white;
-	background: transparent url(../images/bt_register.png) no-repeat 0 0;
+	background: transparent url(./images/bt_register.png) no-repeat 0 0;
 }
 
 #panel .lost-pwd {
@@ -234,4 +236,9 @@
 	font-size: 11px;
 	color: green;
 	display: block;
+}
+
+#logout {
+	display: inline-block;
+	z-index: 1;
 }

@@ -21,14 +21,14 @@
 			matchid = parseInt(matchid);
 			if(!isNaN(matchid))
 			{
-				$.post("/prototype/getScores.php", {match_id : matchid}, output, "json");
-				var pusher = new Pusher('11486c1d5e9edacb7227');
-				var channel = pusher.subscribe('my-channel');
-				channel.bind('my-event', function(data) {
+				//$.post("/prototype/getScores.php", {match_id : matchid}, output, "json");
+				//var pusher = new Pusher('11486c1d5e9edacb7227');
+			//	var channel = pusher.subscribe('my-channel');
+				//channel.bind('my-event', function(data) {
 					//alert('An event was triggered with message: ' + data);
-					output(data);
-				});
-				//poll();
+					//output(data);
+				//});
+				poll();
 			}
 		});  
 		

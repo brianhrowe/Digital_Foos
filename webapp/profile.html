@@ -19,7 +19,7 @@
 			playerid = getUrlVars()["playerid"];
 			playerid = parseInt(playerid);
 			if(!isNaN(playerid)){
-				$.get("/prototype/getProfile.php", {playerid : playerid}, updateProfile, "json");
+				$.get("./getProfile.php", {playerid : playerid}, updateProfile, "json");
 			}
 			//////////////////
 			//Matches Carousel
@@ -52,7 +52,7 @@
 				
 				return false;
 			});
-			$.post("/prototype/getScores.php", {match_id : 13}, updateMatches, "json");
+			$.post("./getScores.php", {match_id : 13}, updateMatches, "json");
 		});
 		
 		function updateMatches(data)
@@ -62,6 +62,7 @@
 		
 		function updateProfile(data)		{
 			//alert(data);
+			if(data.handle)
 			$("#playerHandle").text(data.handle);
 			$.ajax({
 				url:'./images/' + data.avatar,
@@ -75,8 +76,11 @@
 						$("#playerPic").css( {"background-image":"url(./images/" + data.avatar + ")" });
 					}
 			});
+			if(data.jersey)
 			$("#jersey").text("#" + data.jersey);
+			if(data.height)
 			$("#height").text(data.height);
+			if(data.weight)
 			$("#weight").text(data.weight + " lbs");
 			
 			$("#name").append(data.firstName + " " + data.lastName);

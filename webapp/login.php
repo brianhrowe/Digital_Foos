@@ -48,15 +48,19 @@ if(!count($err))
 		
 		// Store some data in the session
 		$msg = array();
+		$msg["success"] = 1;
+		$msg["login_success"] = "You have successfully be logged in!";
+		$msg["username"] = $row["usr"];
+		echo json_encode($msg);
 		setcookie('tzRemember',$_POST['rememberMe']);
 	}
 	else {
 		$err["success"] = 0;
-		$err[]='Wrong username and/or password!';
+		$err["user_pass"]='Wrong username and/or password!';
 	}
 }
 
-if($err)
+if(count($err))
 {
 	echo json_encode($err);
 //$_SESSION['msg']['login-err'] = implode('<br />',$err);

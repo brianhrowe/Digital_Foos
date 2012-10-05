@@ -11,14 +11,16 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />  
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script> 
 	<script type="text/javascript">
+		var session = {};
 		$(document).ready(function() {  
-
+				checkStatus1();
 				var values = {};
+				// register clicked
 				$('#registerForm').submit(function(event) {
 					event.preventDefault();
 					// Get all the forms elements and their values in one step
 					values = $('#registerForm').serializeArray();
-					$.post("/foos/register.php", { username : values[0].value, email : values[1].value, password : values[2].value }, function(data) {
+					$.post("./register.php", { username : values[0].value, email : values[1].value, password : values[2].value }, function(data) {
 						$(".reg_err").text("");
 						$(".reg_success").text("");
 						if(data.success == 0)
@@ -39,27 +41,112 @@
 							{
 								$("#err_email").text(data.email);
 							}
+							if(data.password)
+							{
+								$("#err_password").text(data.password);
+							}
 						}
 						else if(data.success == 1)
 						{
 							if(data.reg_success)
-								$("#success").text(data.reg_success);
+								$("#reg-success").text(data.reg_success);
 						}
 					}, "json");
 				});
+				// login clicked
+				$('#loginForm').submit(function(event) {
+					event.preventDefault();
+					values = $('#loginForm').serializeArray();
+					$("#login-error").text("");
+					$("#login-success").text("");
+					if(values[0].value == "" || values[1].value == "")
+					{
+						$("#login-error").text("You must enter a Username and Password");
+						return;
+					}
+					var rem = 0;
+					if(values[2] && values[2].value)
+						rem = values[2].value;
+					$.post("./login.php", { username : values[0].value, password : values[1].value, rememberMe : rem }, function(data) {
+						if(data.success == 0)
+						{
+							if(data.user_pass)
+								$("#login-error").text(data.user_pass);
+						}
+						else if(data.success = 1)
+						{
+							if(data.login_success)
+								$("#login-success").text(data.login_success);
+							if(data.username)
+								$("#tab_usrn").text(data.username);
+						}
+						checkStatus2();
+					}, "json");
+				});
 		});  
-		
-		function output(data)
+				
+		function checkStatus1()
 		{
-			
+			$.post("./checkStatus.php", function(data) {
+			session = data;
+				if(session.id && session.rememberMe && session.rememberMe != 1 && session.tzRemember && session.tzRemember != 1)
+				{
+					logout();
+				}
+				changeContent();
+			}, "json");
 		}
-		
-		function getUrlVars() {
-			var vars = {};
-			var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
-				vars[key] = value;
+		function checkStatus2()
+		{
+			$.post("./checkStatus.php", function(data) {
+				session = data;
+				changeContent();
+			}, "json");
+		}
+		function changeContent()
+		{
+				if (session.id && session.id != -1 && session.rememberMe != -1  && session.tzRemember != -1 )
+				{
+					
+					getMemberContent();
+				}
+				else
+				{
+					$("#memberContent").html("");
+					$("#memberContent").hide();
+					$("#login-error").text("");
+					$("#login-success").text("");
+					$("#loginForm").show();
+					$("#loginForm").each(function() {
+						// iterate the elements within the form
+						$(':input', this).each(function() {
+							var type = this.type, tag = this.tagName.toLowerCase();
+							if (type == 'text' || type == 'password' || tag == 'textarea')
+								this.value = '';
+								});
+					});
+				}
+		}
+		function getMemberContent()
+		{
+			$.post("./getMemberContent.php", function(data) {
+				$("#memberContent").html(data);
+				$("#memberContent").show();
+				$("#loginForm").hide();
+				$("#logout").click(function(event) {
+					//alert("clicked");
+					event.preventDefault();
+					logout();
+				});
 			});
-			return vars;
+		}		
+		
+		function logout() {
+			$.post("./logout.php", function(data) { 
+				session = data;
+				changeContent();
+			}, "json");
+			
 		}
 
 			// ]]> 
@@ -71,53 +158,56 @@
 			<div id="panel">
 				<div class="content clearfix">
 					<div class="left">
-						<h1>The Sliding jQuery Panel</h1>
-						<h2>A register/login solution</h2>		
-						<p class="grey">You are free to use this login and registration system in you sites!</p>
-						<h2>A Big Thanks</h2>
-						<p class="grey">This tutorial was built on top of <a href="http://web-kreation.com/index.php/tutorials/nice-clean-sliding-login-panel-built-with-jquery" title="Go to site">Web-Kreation</a>'s amazing sliding panel.</p>
+						<h1>Foos Login Panel</h1>
+						<h2>Register/Login Here</h2>		
+						<p class="grey">Do stuff and things!</p>
 					</div>
-						<div class="left">
-							<!-- Login Form -->
-							<form class="clearfix" action="" method="post">
-								<h1>Member Login</h1>
-								<label class="grey" for="username">Username:</label>
-								<input class="field" type="text" name="username" id="username" value="" size="23" /><br />
-								<label class="grey" for="password">Password:</label>
-								<input class="field" type="password" name="password" id="password" size="23" /><br />
-								<label><input name="rememberMe" id="rememberMe" type="checkbox" checked="checked" value="1" /> &nbsp;Remember me</label>
-								<div class="clear"></div>
-								<input type="submit" name="submit" value="Login" class="bt_login" />
-							</form>
+					<div id="middle" class="left">
+						<div id="memberContent">
 						</div>
-						<div class="left right">			
-							<!-- Register Form -->
-							<form id="registerForm" action="" method="post">
-								<h1>Not a member yet? Sign Up!</h1>		
-								<span id="success" class="reg_success"></span>
-								<span id="err_usern1" class="reg_err"></span>
-								<span id="err_usern2" class="reg_err"></span>
-								<span id="err_usern3" class="reg_err"></span>
-								<label class="grey" for="username">Username:</label>
-								<input class="field" type="text" name="username" id="username" value="" size="23" /><br />
-								<span id="err_email" class="reg_err"></span>
-								<label class="grey" for="email">Email:</label>
-								<input class="field" type="text" name="email" id="email" size="23" /><br />
-								<span id="err_usern" class="reg_err"></span>
-								<label class="grey" for="password">Password:</label>
-								<input class="field" type="text" name="password" id="password" size="23" /><br />
-								<input type="submit" name="submit" value="Register" class="bt_register" />
-							</form>
-						</div>
+						<!-- Login Form -->
+						<form id="loginForm" class="clearfix" action="" method="post">
+							<h1>Member Login</h1>
+							<span id="login-success" class="reg_success"></span>
+							<span id="login-error" class="reg_err"></span>
+							<label class="grey" for="username">Username:</label>
+							<input class="field" type="text" name="username" id="username" value="" size="23" /><br />
+							<label class="grey" for="password">Password:</label>
+							<input class="field" type="password" name="password" id="password" size="23" /><br />
+							<label><input name="rememberMe" id="rememberMe" type="checkbox" checked="checked" value="1" /> &nbsp;Remember me</label>
+							<div class="clear"></div>
+							<input type="submit" name="submit" value="Login" class="bt_login" />
+						</form>
 					</div>
+					<div class="left right">			
+						<!-- Register Form -->
+						<form id="registerForm" action="" method="post">
+							<h1>Not a member yet? Sign Up!</h1>		
+							<span id="reg-success" class="reg_success"></span>
+							<label class="grey" for="username">Username:</label>
+							<span id="err_usern1" class="reg_err"></span>
+							<span id="err_usern2" class="reg_err"></span>
+							<span id="err_usern3" class="reg_err"></span>
+							<input class="field" type="text" name="username" id="username" value="" size="23" /><br />
+							<label class="grey" for="email">Email:</label>
+							<span id="err_email" class="reg_err"></span>
+							<input class="field" type="text" name="email" id="email" size="23" /><br />
+							<span id="err_usern" class="reg_err"></span>
+							<label class="grey" for="password">Password:</label>
+							<span id="err_password" class="reg_err"></span>
+							<input class="field" type="text" name="password" id="password" size="23" /><br />
+							<input type="submit" name="submit" value="Register" class="bt_register" />
+						</form>
+					</div>
+				</div>
 			</div>
 			<div class="tab">
 				<ul class="login">
 					<li class="left">&nbsp;</li>
-					<li>Hello <!--?php if(isset($_SESSION['usr']) && isset($_SESSION['usr']) ) echo $_SESSION['usr'] ? $_SESSION['usr'] : 'Guest';?-->!</li>
+					<li>Hello <span id="tab_usrn"></span>!</li>
 					<li class="sep">|</li>
 					<li id="toggle">
-						<a id="open" class="open" href="#"><!--?php if(isset($_SESSION['id']))  echo $_SESSION['id']?'Open Panel':'Log In | Register';?--></a>
+						<a id="open" class="open" href="#"></a>
 						<a id="close" style="display: none;" class="close" href="#">Close Panel</a>			
 					</li>
 					<li class="right">&nbsp;</li>
@@ -138,7 +228,7 @@
 			Player 2:<input type=text name=player2_2><br />
 			Table:
 			<select name="table">
-				<option value="ksq_tornado_sport">KSQ North Tornado Sport</option>
+				<option value="ksq_tornado_sport">KSQ South Tornado Sport</option>
 			</select><br />
 			<input type=submit value="New Match">
 			</form>

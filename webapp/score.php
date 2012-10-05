@@ -1,9 +1,9 @@
 
 
 <?php
-require('Pusher.php');
+/* require('Pusher.php');
 
-$pusher = new Pusher("11486c1d5e9edacb7227", "0035b6daa40e3f4c14f3", "25294");
+$pusher = new Pusher("11486c1d5e9edacb7227", "0035b6daa40e3f4c14f3", "25294"); */
 
 // config variables  
 //$match_id = $_GET['goal'];    // time frame (seconds) to count active users  
@@ -26,7 +26,7 @@ $match_id = $row["match_id"];
 echo "Match ID = $match_id";
 if(isset($_GET['goal']) && $_GET['goal'] == "true") {
 print_r($_GET);
-	if(isset($_GET['id']) && $_GET['id'] == "ksq_tornado_sport_0001") {
+	//if(isset($_GET['id']) && $_GET['id'] == "ksq_tornado_sport_0001") {
 	
 		$get_ip = mysql_query("SELECT * FROM " . $db_table . " WHERE match_id = " . $match_id . " LIMIT 1");  
 		$row = mysql_fetch_array($get_ip);
@@ -65,13 +65,13 @@ print_r($_GET);
 					$get_ip = mysql_query("UPDATE `matches` SET `status`='over'");  
 					$get_ip = mysql_query("UPDATE `matches` SET `winner`='$matchWinner'");  
 				}
-				sendMatchData($pusher, $db_table, $match_id);
+				//sendMatchData($pusher, $db_table, $match_id);
 			}
 		}
-	}
-	else{
-		echo "<br /><h1>Nice try! Your browser doesn't look like an Embedded Circuit to me!</h1>";
-	}
+	//}
+	//else{
+		//echo "<br /><h1>Nice try! Your browser doesn't look like an Embedded Circuit to me!</h1>";
+	//}
 }
 
  function changeScore($yellowScore, $blackScore, $team, $current_game){

@@ -20,16 +20,22 @@ $err = array();
 //for errors
 
 //Check for errors
-if(strlen($_POST['username'])<4 || strlen($_POST['username'])>32)
-{	//if username isn't between 3 and 32 characters
+if(strlen($_POST['username']) < 4 || strlen($_POST['username'])>32)
+{	//if username isn't between 4 and 32 characters
 	$err["success"] = 0;
-	$err["user_num"]='Your username must be between 3 and 32 characters!';
+	$err["user_num"]='Your username must be between 4 and 32 characters!';
 }
 
 if(preg_match('/[^a-z0-9\-\_\.]+/i',$_POST['username']))
 {	//if username contains invalid characters
 		$err["success"] = 0;
 	$err["user_char"]='Your username contains invalid characters!';
+}
+
+if(strlen($_POST['password'])<4 || strlen($_POST['password'])>32)
+{	//if password isn't between 4 and 32 characters
+	$err["success"] = 0;
+	$err["password"]='Your password must be between 4 and 32 characters!';
 }
 
 if(!checkEmail($_POST['email']))
