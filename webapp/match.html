@@ -35,7 +35,7 @@
 		function poll(){
 			$.ajax({
 				type: "POST", 
-				url: "/prototype/getScores.php", 
+				url: "./getScores.php", 
 				data : {match_id : matchid, poll: "true", browserGame: currentGame, browserScore: score}, 
 				success: function(data){
 				output(data);
